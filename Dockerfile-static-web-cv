@@ -1,0 +1,16 @@
+# Use a temporary build stage with a lightweight Alpine image that includes Git.
+FROM alpine/git as git-stage
+
+# Set the working directory to /src inside the container.
+WORKDIR /src
+
+# Clone your GitHub repository into the current working directory.
+RUN git clone https://github.com/Paul-Weaver/Digital-Resume-CSS.git .
+
+# Use a lightweight Alpine image with Nginx for the final container.
+FROM nginx:alpine
+
+# Copy the files from the git-stage to the Nginx web directory in the final container.
+COPY --from=git-stage /src /usr/share/nginx/html
+
+
